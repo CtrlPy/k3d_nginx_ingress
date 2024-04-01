@@ -5,8 +5,44 @@ step1. *created new cluster k3d*
 
  ```zsh
  k3d cluster create -p "8081:80@loadbalancer" --agents 2
+
  ```
- step2. *created new manifest file ingress-nginx.yaml* 
+
+step2. *create deployment nginx --image=nginx*
+
+
+
+```zsh
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+
+```
+
+```zsh
+kubectl apply -f nginx-deployment.yaml
+```
+
+
+
+
+ step4. *created new manifest file ingress-nginx.yaml* 
 
  ```zsh
  # apiVersion: networking.k8s.io/v1beta1 # for k3s < v1.19
@@ -28,3 +64,9 @@ spec:
             port:
               number: 80
  ```
+step3. *Create an ingress object for it by copying the following manifest to a file and applying with*
+
+```zsh 
+kubectl apply -f ingress-nginx.yaml
+```
+
