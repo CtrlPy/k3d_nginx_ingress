@@ -4,7 +4,7 @@
 step1. *created new cluster k3d*
 
  ```zsh
- k3d cluster create -p "8081:80@loadbalancer" --agents 2
+ k3d cluster create --api-port 6550 -p "8081:80@loadbalancer" --agents 2
  ```
 
 step2. *create deployment nginx-deployment.yaml*
