@@ -8,7 +8,7 @@ step1. *created new cluster k3d*
 
  ```
 
-step2. *create deployment nginx --image=nginx*
+step2. *create deployment nginx-deployment.yaml*
 
 
 
@@ -39,7 +39,27 @@ spec:
 kubectl apply -f nginx-deployment.yaml
 ```
 
+step.3 *Create a ClusterIP service for it  nginx-service.yaml*
 
+```zsh
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP
+
+```
+
+```zsh
+kubectl apply -f nginx-deployment.yaml
+```
 
 
  step4. *created new manifest file ingress-nginx.yaml* 
