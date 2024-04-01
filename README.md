@@ -5,7 +5,6 @@ step1. *created new cluster k3d*
 
  ```zsh
  k3d cluster create -p "8081:80@loadbalancer" --agents 2
-
  ```
 
 step2. *create deployment nginx-deployment.yaml*
@@ -17,8 +16,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-deployment
+  labels:
+    app: nginx
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: nginx
@@ -53,7 +54,6 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
-  type: ClusterIP
 
 ```
 
@@ -65,13 +65,12 @@ kubectl apply -f nginx-service.yaml
  step4. *created new manifest file ingress-nginx.yaml* 
 
  ```zsh
- # apiVersion: networking.k8s.io/v1beta1 # for k3s < v1.19
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: nginx
+  name: nginx-ingress
   annotations:
-    ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
   - http:
@@ -80,9 +79,10 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: nginx
+            name: nginx-service
             port:
               number: 80
+
  ```
 step3. *Create an ingress object for it by copying the following manifest to a file and applying with*
 
@@ -92,4 +92,9 @@ kubectl apply -f ingress-nginx.yaml
 
 ```zsh
 curl -v http://localhost:8081/
+```
+
+
+```zsh 
+k3d cluster delete k3s-default
 ```

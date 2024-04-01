@@ -1,10 +1,9 @@
-# apiVersion: networking.k8s.io/v1beta1 # for k3s < v1.19
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: nginx
+  name: nginx-ingress
   annotations:
-    ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
   - http:
@@ -13,6 +12,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: nginx
+            name: nginx-service
             port:
               number: 80
