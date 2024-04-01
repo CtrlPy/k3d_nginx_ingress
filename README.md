@@ -58,7 +58,7 @@ spec:
 ```
 
 ```zsh
-kubectl apply -f nginx-deployment.yaml
+kubectl apply -f nginx-service.yaml
 ```
 
 
@@ -90,3 +90,6 @@ step3. *Create an ingress object for it by copying the following manifest to a f
 kubectl apply -f ingress-nginx.yaml
 ```
 
+```zsh
+curl -v http://localhost:8081/
+```
